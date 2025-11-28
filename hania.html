@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Artistry | Earthy Minimalist Gallery</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- Variables & Theme --- */
+        :root {
+            /* New Palette */
+            --bg-white-gray: #FAFAFA;
+            --bg-soft-stone: #E6E4E0;
+            --color-muted-ash: #B3AFA8;
+            --color-dark-gray: #5D5A55;
+            
+            --text-main: #5D5A55;
+            --text-light: #F2F2F2;
+            
+            --transition-speed: 0.4s;
+            --shadow-soft: 0 10px 30px rgba(93, 90, 85, 0.08);
+            --shadow-hover: 0 20px 40px rgba(93, 90, 85, 0.15);
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--bg-white-gray);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: var(--color-dark-gray);
+        }
+
+        /* --- Utility Classes --- */
+        .text-dark-gray { color: var(--color-dark-gray) !important; }
+        .text-muted-ash { color: var(--color-muted-ash) !important; }
+        .bg-soft-stone { background-color: var(--bg-soft-stone) !important; }
+        .bg-dark-gray { background-color: var(--color-dark-gray) !important; }
+        
+        /* --- Buttons with Animations --- */
+        .btn-custom {
+            background-color: var(--color-dark-gray);
+            color: #fff;
+            border: 1px solid var(--color-dark-gray);
+            border-radius: 2px;
+            padding: 12px 35px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-custom::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background-color: var(--color-muted-ash);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            z-index: -1;
+        }
+
+        .btn-custom:hover {
+            color: #fff;
+            border-color: var(--color-muted-ash);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-custom:hover::after {
+            width: 100%;
+        }
+        
+        .btn-outline-custom {
+            background-color: transparent;
+            color: var(--color-dark-gray);
+            border: 1px solid var(--color-dark-gray);
+            border-radius: 2px;
+            padding: 10px 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+        }
+
+        .btn-outline-custom:hover {
+            background-color: var(--color-dark-gray);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .section-padding { padding: 120px 0; }
+        
+        .section-title {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 2px;
+            background-color: var(--color-muted-ash);
+            margin: 25px auto 0;
+            transition: width 0.6s ease;
+        }
+
+        .section-header:hover .section-title::after {
+            width: 140px;
+        }
+
+        /* --- Header / Navbar --- */
+        .navbar {
+            background-color: #000000 !important;
+            padding: 20px 0;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.02);
+        }
+
+        .navbar.scrolled {
+            padding: 10px 0;
+            background-color: rgba(0, 0, 0, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .navbar-brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #ffffff !important;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-brand span { color: var(--color-muted-ash); }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-weight: 400;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            margin: 0 15px;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--color-muted-ash);
+            transition: width 0.4s ease;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+        }
+
+        .nav-link:hover::before { width: 100%; }
+        
+        /* Button override for navbar to look good on black */
+        .navbar .btn-custom {
+             background-color: #fff;
+             color: #000;
+             border-color: #fff;
+        }
+        .navbar .btn-custom:hover {
+             background-color: var(--color-muted-ash);
+             border-color: var(--color-muted-ash);
+             color: #fff;
+        }
+
+        /* Hamburger Menu Styling */
+        .navbar-toggler {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 5px 10px;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: none;
+            position: relative;
+            width: 24px;
+            height: 18px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .navbar-toggler-icon::after, 
+        .navbar-toggler-icon::before,
+        .navbar-toggler-icon div {
+            background-color: #ffffff;
+            content: '';
+            display: block;
+            height: 2px;
+            position: absolute;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .navbar-toggler-icon::before { top: 0; }
+        .navbar-toggler-icon div { top: 8px; }
+        .navbar-toggler-icon::after { bottom: 0; }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh;
+            background-color: var(--bg-white-gray);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .hero-content {
+            z-index: 2;
+            position: relative;
+            padding-right: 50px;
+        }
+
+        .hero-bg-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background-image: url('/assets/images/a_premium_artistic_canvas_painting_for_hero_section.png');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            transition: transform 10s ease;
+        }
+
+        .hero:hover .hero-bg-right {
+            transform: scale(1.05);
+        }
+        
+        .hero-overlay-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--bg-white-gray) 80%, rgba(250,250,250,0) 100%);
+            z-index: 2;
+        }
+
+        @media (max-width: 991px) {
+            .hero-bg-right { width: 100%; opacity: 0.2; }
+            .hero-overlay-left { width: 100%; background: rgba(250,250,250,0.85); }
+            .hero-content { padding-right: 0; text-align: center; }
+            .section-title { font-size: 2.5rem; }
+        }
+
+        /* Entrance Animations */
+        .animate-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .animate-up.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+
+        /* --- What is Canvas --- */
+        .what-is-canvas { background-color: var(--bg-white-gray); }
+        
+        .canvas-img-wrapper {
+            position: relative;
+            overflow: hidden;
+            box-shadow: -20px 20px 0px var(--bg-soft-stone);
+            transition: all 0.5s ease;
+        }
+        
+        .canvas-img-wrapper:hover { 
+            box-shadow: -10px 10px 0px var(--color-muted-ash);
+            transform: translateY(-5px);
+        }
+        
+        .canvas-img-wrapper img {
+            width: 100%;
+            transition: transform 1s ease;
+            filter: sepia(20%);
+        }
+
+        .canvas-img-wrapper:hover img { 
+            transform: scale(1.05); 
+            filter: sepia(0%);
+        }
+
+        /* --- Gallery --- */
+        .gallery-card {
+            background: #fff;
+            border: none;
+            border-radius: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            height: 100%;
+            position: relative;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .gallery-img-container {
+            overflow: hidden;
+            position: relative;
+            padding-top: 120%; /* Portrait Aspect Ratio */
+        }
+
+        .gallery-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .gallery-card:hover .gallery-img { transform: scale(1.1); }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(93, 90, 85, 0.8);
+            opacity: 0;
+            transition: opacity 0.4s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .gallery-card:hover .gallery-overlay { opacity: 1; }
+
+        /* --- Why Try --- */
+        .why-try { background-color: var(--bg-soft-stone); color: var(--color-dark-gray); }
+        
+        .benefit-card {
+            background: #fff;
+            padding: 50px 30px;
+            text-align: center;
+            border: 1px solid transparent;
+            transition: all 0.5s ease;
+            height: 100%;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .benefit-card:hover {
+            background: #fff;
+            border-color: var(--color-muted-ash);
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 25px;
+            color: var(--color-muted-ash);
+            transition: all 0.5s;
+            display: inline-block;
+        }
+
+        .benefit-card:hover .benefit-icon { 
+            color: var(--color-dark-gray); 
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* --- Artists --- */
+        .artist-card {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .artist-img {
+            width: 100%;
+            filter: grayscale(100%) contrast(90%);
+            transition: all 0.6s ease;
+        }
+
+        .artist-card:hover .artist-img { 
+            filter: grayscale(0%) contrast(100%); 
+            transform: scale(1.05); 
+        }
+
+        .artist-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px;
+            background: linear-gradient(to top, rgba(93, 90, 85, 0.95), transparent);
+            color: #fff;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .artist-card:hover .artist-info { transform: translateY(0); opacity: 1; }
+
+        /* --- Feedback Form --- */
+        .feedback-section {
+            background-color: var(--bg-soft-stone);
+            position: relative;
+        }
+
+        .form-control {
+            border-radius: 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-family: 'Lato', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: var(--color-dark-gray);
+            background: #fff;
+        }
+
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            background-color: #fff5f5;
+        }
+
+        .form-control.is-invalid:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        /* --- Comments --- */
+        .comment-box {
+            background: #fff;
+            padding: 30px;
+            margin-bottom: 25px;
+            border-left: 3px solid var(--color-muted-ash);
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s;
+            display: none; /* Hidden by default */
+        }
+
+        .comment-box.visible { display: block; }
+
+        .comment-box:hover { 
+            transform: translateX(10px); 
+            border-left-color: var(--color-dark-gray);
+        }
+
+        /* --- Widget --- */
+        .toast-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #fff;
+            color: var(--color-dark-gray);
+            padding: 20px;
+            width: 280px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: none;
+            border: 8px solid #d4c5b5; /* Canvas wood frame look */
+            border-radius: 2px;
+            animation: slideInUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            background-image: linear-gradient(#fcfcfc 1px, transparent 1px), linear-gradient(90deg, #fcfcfc 1px, transparent 1px);
+            background-size: 10px 10px;
+            background-color: #fdfdfd;
+        }
+
+        .toast-widget .icon-check {
+            width: 30px;
+            height: 30px;
+            background: var(--color-dark-gray);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        @keyframes slideInUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* --- Footer --- */
+        footer { 
+            background: #000000; 
+            color: rgba(255,255,255,0.7); 
+            padding: 80px 0 30px; 
+        }
+        footer h3, footer h5 { color: #fff; }
+        footer a { color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s; }
+        footer a:hover { color: var(--color-muted-ash); padding-left: 5px; }
+        
+        /* --- Modal --- */
+        .modal-content { border-radius: 0; border: none; overflow: hidden; }
+        .modal-header { border: none; padding: 30px 40px 0; }
+        .modal-body { padding: 40px; }
+        .btn-close { opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Canvas<span>Artistry</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon">
+                    <div></div>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                              <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/canvas.html">What is Canvas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/gallery.html">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/form.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-bg-right"></div>
+        <div class="hero-overlay-left"></div>
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-lg-7 hero-content">
+                    <h4 class="text-muted-ash text-uppercase letter-spacing-2 mb-3 animate-up">Minimalist Art Gallery</h4>
+                    <h1 class="display-2 mb-4 animate-up delay-100">The Art of <br><span class="fst-italic">Quiet Elegance</span></h1>
+                    <p class="lead text-secondary mb-5 animate-up delay-200" style="max-width: 500px;">Explore a curated collection where texture meets tone. Discover masterpieces that bring calm and sophistication to your space.</p>
+                    <div class="animate-up delay-300">
+                        <a href="#gallery" class="btn btn-custom me-3">View Gallery</a>
+                        <a href="#artists" class="btn btn-outline-custom">Meet Artists</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What Is Canvas -->
+    <section id="what-is-canvas" class="section-padding what-is-canvas">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0 animate-up">
+                    <div class="pe-lg-5">
+                        <h2 class="section-title">What is Canvas?</h2>
+                        <p class="lead text-dark-gray mt-4">A tactile foundation for timeless expression.</p>
+                        <p class="text-secondary">Canvas is more than a surface; it is a dialogue between weave and pigment. Crafted from premium cotton or linen, our canvases offer a resilient texture that captures the light and holds the artist's intent with lasting fidelity.</p>
+                        <p class="text-secondary">Whether hosting bold abstract strokes or delicate impressionist washes, the organic grain of the fabric adds a dimension of warmth that digital mediums cannot replicate.</p>
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <h3 class="text-dark-gray">100%</h3>
+                                <small class="text-uppercase text-muted-ash letter-spacing-2">Cotton Duck</small>
+                            </div>
+                            <div class="col-6">
+                                <h3 class="text-dark-gray">Archival</h3>
+                                <small class="text-uppercase text-muted-ash letter-spacing-2">Museum Grade</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 animate-up delay-200">
+                    <div class="canvas-img-wrapper">
+                        <img src="https://cdn.pixabay.com/photo/2017/07/05/19/21/art-2475718_960_720.jpg" alt="Artist Painting">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="section-padding bg-white">
+        <div class="container">
+            <div class="text-center section-header mb-5 animate-up">
+                <h2 class="section-title">Curated Collection</h2>
+                <p class="text-muted-ash text-uppercase letter-spacing-2">Selected works for the modern home</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Card 1 -->
+                <div class="col-md-6 col-lg-3 animate-up delay-100">
+                    <div class="gallery-card" data-id="1" data-title="Ethereal Gold" data-price="1200" data-artist="Elena Vostrikov" data-desc="A stunning abstract composition featuring real 24k gold leaf and deep ocean blues.">
+                        <div class="gallery-img-container">
+                            <img src="https://cdn.pixabay.com/photo/2015/02/19/20/24/lunch-gold-flowers-642668_960_720.jpg" class="gallery-img" alt="Ethereal Gold">
+                            <div class="gallery-overlay">
+                                <span class="btn btn-outline-custom text-white border-white">View Details</span>
+                            </div>
+                        </div>
+                        <div class="p-4 text-center">
+                            <h5 class="mb-1 font-playfair">Ethereal Gold</h5>
+                            <p class="text-muted small mb-2">30x30 inches</p>
+                            <h5 class="text-dark-gray">$1,200</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="col-md-6 col-lg-3 animate-up delay-200">
+                    <div class="gallery-card" data-id="2" data-title="Serenity Lake" data-price="850" data-artist="Marcus Thorne" data-desc="A peaceful impressionist landscape capturing the morning mist over a mountain lake.">
+                        <div class="gallery-img-container">
+                            <img src="https://cdn.pixabay.com/photo/2022/09/27/19/48/ai-generated-7483615_960_720.jpg" class="gallery-img" alt="Serenity Lake">
+                            <div class="gallery-overlay">
+                                <span class="btn btn-outline-custom text-white border-white">View Details</span>
+                            </div>
+                        </div>
+                        <div class="p-4 text-center">
+                            <h5 class="mb-1 font-playfair">Serenity Lake</h5>
+                            <p class="text-muted small mb-2">24x36 inches</p>
+                            <h5 class="text-dark-gray">$850</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="col-md-6 col-lg-3 animate-up delay-300">
+                    <div class="gallery-card" data-id="3" data-title="Modern Gaze" data-price="1500" data-artist="Sarah Jenkins" data-desc="Bold, expressive brushwork defines this contemporary portrait full of emotion.">
+                        <div class="gallery-img-container">
+                            <img src="https://cdn.pixabay.com/photo/2020/05/17/20/34/concept-5183469_960_720.jpg" class="gallery-img" alt="Modern Gaze">
+                            <div class="gallery-overlay">
+                                <span class="btn btn-outline-custom text-white border-white">View Details</span>
+                            </div>
+                        </div>
+                        <div class="p-4 text-center">
+                            <h5 class="mb-1 font-playfair">Modern Gaze</h5>
+                            <p class="text-muted small mb-2">40x40 inches</p>
+                            <h5 class="text-dark-gray">$1,500</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="col-md-6 col-lg-3 animate-up delay-100">
+                    <div class="gallery-card" data-id="4" data-title="Floral Study No. 5" data-price="600" data-artist="David Chen" data-desc="Classical chiaroscuro technique brings these flowers to life with dramatic lighting.">
+                        <div class="gallery-img-container">
+                            <img src="https://cdn.pixabay.com/photo/2020/09/11/13/35/floral-painting-5563198_960_720.jpg" class="gallery-img" alt="Floral Study">
+                            <div class="gallery-overlay">
+                                <span class="btn btn-outline-custom text-white border-white">View Details</span>
+                            </div>
+                        </div>
+                        <div class="p-4 text-center">
+                            <h5 class="mb-1 font-playfair">Floral Study No. 5</h5>
+                            <p class="text-muted small mb-2">20x24 inches</p>
+                            <h5 class="text-dark-gray">$600</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Try Section -->
+    <section class="section-padding why-try">
+        <div class="container">
+            <div class="text-center section-header mb-5 animate-up">
+                <h2 class="section-title">Why Canvas?</h2>
+                <p class="text-dark-gray text-uppercase letter-spacing-2">Rediscover the joy of creation</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3 animate-up delay-100">
+                    <div class="benefit-card">
+                        <i class="fas fa-palette benefit-icon"></i>
+                        <h4>Creativity</h4>
+                        <p class="small mt-3 text-secondary">Disconnect to reconnect. Unleash your innate ability to create.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 animate-up delay-200">
+                    <div class="benefit-card">
+                        <i class="fas fa-spa benefit-icon"></i>
+                        <h4>Mindfulness</h4>
+                        <p class="small mt-3 text-secondary">The meditative stroke of the brush reduces anxiety and promotes clarity.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 animate-up delay-300">
+                    <div class="benefit-card">
+                        <i class="fas fa-home benefit-icon"></i>
+                        <h4>Aesthetics</h4>
+                        <p class="small mt-3 text-secondary">Elevate your living space with art that tells your personal story.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 animate-up delay-100">
+                    <div class="benefit-card">
+                        <i class="fas fa-graduation-cap benefit-icon"></i>
+                        <h4>Mastery</h4>
+                        <p class="small mt-3 text-secondary">Develop fine motor skills and learn techniques passed down through centuries.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Artists -->
+    <section id="artists" class="section-padding bg-white">
+        <div class="container">
+            <div class="text-center section-header mb-5 animate-up">
+                <h2 class="section-title">Featured Artists</h2>
+                <p class="text-muted-ash text-uppercase letter-spacing-2">Visionaries behind the canvas</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 animate-up delay-100">
+                    <div class="artist-card">
+                        <img src="/assets/images/portrait_of_a_female_artist.png" class="artist-img" alt="Elena">
+                        <div class="artist-info">
+                            <h3>Elena Vostrikov</h3>
+                            <p class="text-white-50 text-uppercase small letter-spacing-2">Abstract & Gold</p>
+                            <p class="small mt-2">Combining traditional gilding with modern expressionism.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-up delay-200">
+                    <div class="artist-card">
+                        <img src="/assets/images/portrait_of_a_male_artist.png" class="artist-img" alt="Marcus">
+                        <div class="artist-info">
+                            <h3>Marcus Thorne</h3>
+                            <p class="text-white-50 text-uppercase small letter-spacing-2">Impressionist Landscapes</p>
+                            <p class="small mt-2">Capturing the fleeting light of nature through bold strokes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 animate-up delay-300">
+                    <div class="artist-card">
+                        <img src="/assets/images/portrait_of_a_senior_artist.png" class="artist-img" alt="Sarah">
+                        <div class="artist-info">
+                            <h3>Sarah Jenkins</h3>
+                            <p class="text-white-50 text-uppercase small letter-spacing-2">Contemporary Portraiture</p>
+                            <p class="small mt-2">Exploring the human condition through vibrant color.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Form -->
+    <section id="contact" class="section-padding feedback-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 animate-up">
+                    <div class="bg-white p-5 shadow-lg" style="border-top: 5px solid var(--color-dark-gray);">
+                        <div class="text-center mb-5">
+                            <h2 class="mb-2">Get in Touch</h2>
+                            <p class="text-muted">We'd love to hear from you</p>
+                        </div>
+                        <form id="feedbackForm">
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <label class="form-label small text-uppercase text-muted-ash">Your Name</label>
+                                    <input type="text" class="form-control" id="name" required>
+                                    <div class="error-message" id="nameError">Name is required</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small text-uppercase text-muted-ash">Your Email</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                    <div class="error-message" id="emailError">Valid email is required</div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small text-uppercase text-muted-ash">Message</label>
+                                    <textarea class="form-control" id="message" rows="5" required minlength="10"></textarea>
+                                    <div class="error-message" id="messageError">Message must be at least 10 characters</div>
+                                </div>
+                                <div class="col-12 text-center mt-4">
+                                    <button type="submit" class="btn btn-custom w-100">Send Feedback</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comments Section -->
+    <section class="section-padding bg-white">
+        <div class="container">
+            <div class="text-center section-header mb-5 animate-up">
+                <h2 class="section-title">Community Voices</h2>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8" id="commentsContainer">
+                    <!-- Pre-filled Comments -->
+                    <div class="comment-box visible animate-up delay-100">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5 class="mb-0">Alice M.</h5>
+                            <small class="text-muted">2 days ago</small>
+                        </div>
+                        <p class="text-secondary mb-0">The workshop was absolutely transformative! I never knew I had this creativity in me.</p>
+                    </div>
+                    <div class="comment-box visible animate-up delay-200">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h5 class="mb-0">James R.</h5>
+                            <small class="text-muted">1 week ago</small>
+                        </div>
+                        <p class="text-secondary mb-0">Bought the 'Serenity Lake' piece. It looks even better in person. Secure shipping too.</p>
+                    </div>
+                    
+                    <!-- Hidden Comments -->
+                    <div class="comment-box">
+                        <div class="d-flex justify-content-between mb-2"><h5>Sophia L.</h5><small class="text-muted">2 weeks ago</small></div>
+                        <p class="text-secondary mb-0">Such a classy atmosphere. The instructors are patient and very skilled.</p>
+                    </div>
+                    <div class="comment-box">
+                        <div class="d-flex justify-content-between mb-2"><h5>Michael B.</h5><small class="text-muted">3 weeks ago</small></div>
+                        <p class="text-secondary mb-0">A perfect weekend activity. Highly recommend the oil painting basics class.</p>
+                    </div>
+                    <div class="comment-box">
+                        <div class="d-flex justify-content-between mb-2"><h5>Emma W.</h5><small class="text-muted">1 month ago</small></div>
+                        <p class="text-secondary mb-0">The gallery collection is top tier. Truly premium art.</p>
+                    </div>
+                    <div class="comment-box">
+                        <div class="d-flex justify-content-between mb-2"><h5>David K.</h5><small class="text-muted">1 month ago</small></div>
+                        <p class="text-secondary mb-0">I love how the website feels. Just like visiting a real high-end gallery.</p>
+                    </div>
+                    <div class="comment-box">
+                        <div class="d-flex justify-content-between mb-2"><h5>Olivia P.</h5><small class="text-muted">2 months ago</small></div>
+                        <p class="text-secondary mb-0">Great customer service when I had questions about framing.</p>
+                    </div>
+                    <div class="comment-box">
+                        <div class="d-flex justify-content-between mb-2"><h5>Daniel H.</h5><small class="text-muted">2 months ago</small></div>
+                        <p class="text-secondary mb-0">Cannot wait for the next exhibition opening!</p>
+                    </div>
+                </div>
+                
+                <div class="col-12 text-center mt-4 animate-up">
+                    <button id="showAllComments" class="btn btn-outline-custom rounded-pill px-4">Show All Comments</button>
+                </div>
+
+                <!-- Add Comment -->
+                <div class="col-lg-8 mt-5 animate-up">
+                    <div class="bg-soft-stone p-4 rounded">
+                        <h4 class="mb-4"><i class="far fa-comment-dots me-2 text-dark-gray"></i>Leave a Comment</h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <input type="text" id="newCommentName" class="form-control border-0" placeholder="Name">
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" id="newCommentText" class="form-control border-0" placeholder="Share your thoughts...">
+                            </div>
+                            <div class="col-12 text-end">
+                                <button id="postComment" class="btn btn-custom btn-sm">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h3 class="mb-3" style="font-family: 'Playfair Display', serif;">Canvas<span>Artistry</span></h3>
+                    <p class="small">Dedicated to the preservation and celebration of canvas art in all its forms. Join our community of creators and collectors.</p>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="mb-3">Explore</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#home">Home</a></li>
+                        <li class="mb-2"><a href="#what-is-canvas">About</a></li>
+                        <li class="mb-2"><a href="#gallery">Gallery</a></li>
+                        <li class="mb-2"><a href="#artists">Artists</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">Services</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#">Custom Framing</a></li>
+                        <li class="mb-2"><a href="#">Restoration</a></li>
+                        <li class="mb-2"><a href="#">Commissions</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5 class="mb-3">Contact</h5>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> 123 Art Avenue, NY</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> hello@canvasartistry.com</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center border-top border-secondary pt-4 mt-4">
+                <p class="mb-0 small opacity-50">&copy; 2024 Canvas Artistry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal for Gallery -->
+    <div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <img src="" id="modalImage" class="img-fluid w-100 shadow-sm" alt="Painting">
+                        </div>
+                        <div class="col-lg-6 d-flex flex-column justify-content-center ps-lg-5">
+                            <h2 id="modalTitle" class="mb-2 display-5">Title</h2>
+                            <p id="modalArtist" class="text-dark-gray fw-bold mb-4 text-uppercase letter-spacing-2">Artist</p>
+                            <p id="modalDesc" class="text-secondary mb-5 lead">Description goes here.</p>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-4">
+                                    <h3 id="modalPrice" class="mb-0 text-dark-gray">$0</h3>
+                                    <div class="d-flex align-items-center border px-3 py-1">
+                                        <button class="btn btn-sm border-0" id="decreaseQty"><i class="fas fa-minus text-secondary"></i></button>
+                                        <span id="modalQty" class="mx-3 fw-bold">1</span>
+                                        <button class="btn btn-sm border-0" id="increaseQty"><i class="fas fa-plus text-secondary"></i></button>
+                                    </div>
+                                </div>
+                                <button id="addToCartBtn" class="btn btn-custom w-100 py-3">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Widget -->
+    <div class="toast-widget" id="toastWidget">
+        <div class="d-flex align-items-center">
+            <div class="icon-check">
+                <i class="fas fa-check"></i>
+            </div>
+            <div>
+                <h6 class="mb-0 fw-bold">Succes full</h6>
+                <small class="opacity-75" id="toastMessage">Your paintng is booked.</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // --- Entrance Animations (Intersection Observer) ---
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.animate-up').forEach(el => {
+                observer.observe(el);
+            });
+
+            // --- Smooth Scrolling ---
+            $('a.nav-link, .btn-custom, .btn-outline-custom').on('click', function(event) {
+                if (this.hash !== "") {
+                    var hashElement = $(this.hash);
+                    if (hashElement.length > 0) {
+                        event.preventDefault();
+                        $('html, body').animate({
+                            scrollTop: hashElement.offset().top - 80
+                        }, 800);
+                    }
+                }
+            });
+
+            // --- Navbar Scroll Effect ---
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    $('.navbar').addClass('scrolled');
+                } else {
+                    $('.navbar').removeClass('scrolled');
+                }
+            });
+
+            // --- Gallery Modal Logic ---
+            let currentQty = 1;
+            
+            $('.gallery-card').click(function() {
+                const img = $(this).find('.gallery-img').attr('src');
+                const title = $(this).data('title');
+                const price = $(this).data('price');
+                const artist = $(this).data('artist');
+                const desc = $(this).data('desc');
+
+                $('#modalImage').attr('src', img);
+                $('#modalTitle').text(title);
+                $('#modalPrice').text('$' + price);
+                $('#modalArtist').text('by ' + artist);
+                $('#modalDesc').text(desc);
+                
+                currentQty = 1;
+                $('#modalQty').text(currentQty);
+                
+                const modal = new bootstrap.Modal(document.getElementById('galleryModal'));
+                modal.show();
+            });
+
+            // Quantity Controls
+            $('#increaseQty').click(function() {
+                currentQty++;
+                $('#modalQty').text(currentQty);
+            });
+
+            $('#decreaseQty').click(function() {
+                if (currentQty > 1) {
+                    currentQty--;
+                    $('#modalQty').text(currentQty);
+                }
+            });
+
+            // --- Add to Cart Widget ---
+            function showToast(message) {
+                $('#toastMessage').text(message);
+                $('#toastWidget').css('display', 'block').hide().fadeIn();
+                
+                setTimeout(function() {
+                    $('#toastWidget').fadeOut();
+                }, 3000);
+            }
+
+            $('#addToCartBtn').click(function() {
+                // Close modal
+                const modalEl = document.getElementById('galleryModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                
+                // Show widget
+                showToast('Your painting is booked');
+            });
+
+            // --- Comments Logic ---
+            $('#showAllComments').click(function() {
+                $('.comment-box').addClass('visible').hide().fadeIn();
+                $(this).hide(); // Hide the button after showing all
+            });
+
+            $('#postComment').click(function() {
+                const name = $('#newCommentName').val();
+                const text = $('#newCommentText').val();
+
+                if (name && text) {
+                    const newHtml = `
+                        <div class="comment-box visible animate-up in-view" style="display:none; border-left-color: #5D5A55;">
+                            <div class="d-flex justify-content-between mb-2">
+                                <h5 class="mb-0">${name}</h5>
+                                <small class="text-muted">Just now</small>
+                            </div>
+                            <p class="text-secondary mb-0">${text}</p>
+                        </div>
+                    `;
+                    
+                    $('#commentsContainer').prepend(newHtml);
+                    $('#commentsContainer .comment-box:first').slideDown();
+                    
+                    // Clear inputs
+                    $('#newCommentName').val('');
+                    $('#newCommentText').val('');
+                }
+            });
+
+            // --- Feedback Form Validation ---
+            $('#feedbackForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                const name = $('#name').val().trim();
+                const email = $('#email').val().trim();
+                const message = $('#message').val().trim();
+                
+                let isValid = true;
+                
+                // Name validation
+                if (!name) {
+                    $('#name').addClass('is-invalid');
+                    $('#nameError').addClass('show');
+                    isValid = false;
+                } else {
+                    $('#name').removeClass('is-invalid');
+                    $('#nameError').removeClass('show');
+                }
+                
+                // Email validation
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email || !emailPattern.test(email)) {
+                    $('#email').addClass('is-invalid');
+                    $('#emailError').addClass('show');
+                    isValid = false;
+                } else {
+                    $('#email').removeClass('is-invalid');
+                    $('#emailError').removeClass('show');
+                }
+                
+                // Message validation
+                if (!message || message.length < 10) {
+                    $('#message').addClass('is-invalid');
+                    $('#messageError').addClass('show');
+                    isValid = false;
+                } else {
+                    $('#message').removeClass('is-invalid');
+                    $('#messageError').removeClass('show');
+                }
+                
+                if (isValid) {
+                    showToast('آپ کا feedback بھیج دیا گیا');
+                    $(this)[0].reset();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
